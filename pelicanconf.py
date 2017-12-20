@@ -85,3 +85,7 @@ SITEMAP = {
 # URL Settings
 ARTICLE_URL = 'posts/{date:%Y}/{date:%b}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'posts/{date:%Y}/{date:%b}/{date:%d}/{slug}/index.html'
+
+# social links
+SOCIAL = (('github', 'https://github.com/linuxluigi'),
+          ('rss', '//linuxluigi.com/feeds/all.atom.xml'))

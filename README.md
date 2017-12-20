@@ -1,25 +1,11 @@
-## Update Theme
+# Linuxluigi.com Blog
 
-```bash
-git clone git@github.com:alexandrevicenzi/Flex.git pelican-themes/Flex
-cd pelican-themes/Flex
-git checkout tags/v2.1.0
-```
+Using https://blog.getpelican.com
 
-## Update Plugins
+# Deploy
 
-```bash
-git clone --recursive https://github.com/getpelican/pelican-plugins
-```
-
-## intressting plugins
-
-assets
-https://github.com/getpelican/pelican-plugins
-
-Search
-https://github.com/getpelican/pelican-plugins/tree/master/tipue_search
-
-## Deploy
-
-https://medium.com/@kent/how-to-host-your-blog-using-pelican-amazon-s3-and-cloudflare-300e718943f8
+````bash
+$ pelican content -o output -s pelicanconf.py
+$ ghp-import output
+$ git push origin gh-pages
+````
