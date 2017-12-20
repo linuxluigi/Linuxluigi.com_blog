@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="../../../../../theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../../../theme/font-awesome/css/font-awesome.min.css">
+
+    <link href="../../../../../static/custom.css" rel="stylesheet">
+
+    <link href="https://linuxluigi.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Linuxluigi.com Atom">
+
+
+    <link rel="shortcut icon" href="https://linuxluigi.com/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://linuxluigi.com/images/favicon.ico" type="image/x-icon">
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#333">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#333">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="author" content="Steffen Exler" />
+<meta name="description" content="Mac & Linux Images auf Speichermedium wie SD-Card & USB Stick aufspielen. Z.B. für Raspberry Pi." />
+<meta name="keywords" content="dd, shell, terminal">
+<meta property="og:site_name" content="Linuxluigi.com"/>
+<meta property="og:title" content="Images aufspielen und sichern mit dem Terminal"/>
+<meta property="og:description" content="Mac & Linux Images auf Speichermedium wie SD-Card & USB Stick aufspielen. Z.B. für Raspberry Pi."/>
+<meta property="og:locale" content="de_DE"/>
+<meta property="og:url" content="../../../../../posts/2017/Okt/31/dd/"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-10-31 11:05:00+01:00"/>
+<meta property="article:modified_time" content="2017-10-31 11:05:00+01:00"/>
+<meta property="article:author" content="../../../../../author/steffen-exler.html">
+<meta property="article:section" content="shell"/>
+<meta property="article:tag" content="dd"/>
+<meta property="article:tag" content="shell"/>
+<meta property="article:tag" content="terminal"/>
+<meta property="og:image" content="https://linuxluigi.com/images/profile.png">
+
+  <title>Linuxluigi.com &ndash; Images aufspielen und sichern mit dem Terminal</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="../../../../..">
+        <img src="https://linuxluigi.com/images/profile.png" alt="Linuxluigi Blog" title="Linuxluigi Blog">
+      </a>
+      <h1><a href="../../../../..">Linuxluigi Blog</a></h1>
+
+<p>Coding & Admin stuff</p>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/linuxluigi" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-rss" href="//linuxluigi.com/feeds/all.atom.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="../../../../..">    Home
+</a>
+
+
+      <a href="https://linuxluigi.com/feeds/all.atom.xml">    Atom
+</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+    <h1 id="dd">Images aufspielen und sichern mit dem Terminal</h1>
+    <p>
+          Posted on Di 31 Oktober 2017 in <a href="../../../../../category/shell.html">shell</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <div class="section" id="mac-gerate-auflisten">
+<h2>Mac Geräte auflisten</h2>
+<p>Unter mac kann mit <tt class="docutils literal">diskutil list</tt> alle Speichergeräte aufgelistet werden</p>
+<pre class="literal-block">
+diskutil list
+</pre>
+<p>Beispiel ausgabe</p>
+<pre class="literal-block">
+/dev/disk0 (internal):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      GUID_partition_scheme                         251.0 GB   disk0
+   1:                        EFI EFI                     314.6 MB   disk0s1
+   2:                 Apple_APFS Container disk1         250.7 GB   disk0s2
+
+/dev/disk1 (synthesized):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      APFS Container Scheme -                      +250.7 GB   disk1
+                                 Physical Store disk0s2
+   1:                APFS Volume Macintosh HD            225.3 GB   disk1s1
+   2:                APFS Volume Preboot                 20.2 MB    disk1s2
+   3:                APFS Volume Recovery                519.9 MB   disk1s3
+   4:                APFS Volume VM                      3.2 GB     disk1s4
+
+/dev/disk2 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:     FDisk_partition_scheme                        *16.0 GB    disk2
+   1:                      Linux                         21.0 MB    disk2s1
+   2:                      Linux                         16.0 GB    disk2s2
+</pre>
+</div>
+<div class="section" id="sd-card-oder-usb-stick-iso-erstellen">
+<h2>SD-Card oder USB Stick ISO erstellen</h2>
+<p>Mit <tt class="docutils literal">dd</tt> lassen sich Datenträger als ISO abilden dabei gibt der Parameter <tt class="docutils literal">if</tt> das Quellverzeichnis an &amp; <tt class="docutils literal">of</tt>
+das Ziel Verzeichnis. Beispiel beim Backup einer Raspbian SD-Card welches sich unter <tt class="docutils literal">/dev/disk2</tt> befindet und auf
+dem Desktop <tt class="docutils literal">~/Desktop/raspberrypi.dmg</tt> gesichert werden soll.:</p>
+<pre class="literal-block">
+sudo dd bs=1m if=/dev/disk2 of=~/Desktop/raspberrypi.dmg
+</pre>
+<p>sudo dd bs=100m if=/dev/rdisk2 of=~/Desktop/raspberrypi.dmg
+Dies kann einige Minuten in anspruch nehmen, je nachdem wie groß die SD-Card ist &amp; wie schnell die Datenübertragungsrate
+zwischen der Card und dem PC ist.</p>
+</div>
+<div class="section" id="iso-auf-datentrager-aufspielen">
+<h2>ISO auf Datenträger aufspielen</h2>
+<p>Wieder mit <tt class="docutils literal">dd</tt> lassen sich Datenträger bearbeiten. Diesmal muss fast der gleiche Befehl eingegeben werden wie beim
+erstellen einer ISO File nur <tt class="docutils literal">if</tt> &amp; <tt class="docutils literal">of</tt> müssen ausgetauscht werden.:</p>
+<pre class="literal-block">
+diskutil unmountDisk /dev/disk2
+sudo dd bs=1m if=~/Desktop/raspberrypi.dmg of=/dev/disk2
+</pre>
+</div>
+<div class="section" id="mac-sd-card-oder-usb-auswerfen-im-terminal">
+<h2>Mac SD-Card oder USB auswerfen im Terminal</h2>
+<p>Mittels <tt class="docutils literal">diskutil list</tt> das Ziel Gerät auslesen, meist unter Mac <tt class="docutils literal">/dev/disk2</tt> und dann via <tt class="docutils literal">diskutil unmountDisk device</tt>
+auswerfen.:</p>
+<pre class="literal-block">
+diskutil unmountDisk /dev/disk2
+</pre>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="../../../../../tag/dd.html">dd</a>
+      <a href="../../../../../tag/shell.html">shell</a>
+      <a href="../../../../../tag/terminal.html">terminal</a>
+    </p>
+  </div>
+
+
+
+
+</article>
+
+    <footer>
+<p>
+  &copy; Steffen Exler 2017 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Linuxluigi.com ",
+  "url" : "../../../../..",
+  "image": "https://linuxluigi.com/images/profile.png",
+  "description": "Coding & admin stuff blog"
+}
+</script>
+</body>
+</html>

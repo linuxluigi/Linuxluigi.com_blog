@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Linuxluigi.com - shell</title><link href="https://linuxluigi.com/" rel="alternate"></link><link href="https://linuxluigi.com/feeds/shell.atom.xml" rel="self"></link><id>https://linuxluigi.com/</id><updated>2017-10-31T11:05:00+01:00</updated><entry><title>Images aufspielen und sichern mit dem Terminal</title><link href="https://linuxluigi.com/posts/2017/Okt/31/dd/" rel="alternate"></link><published>2017-10-31T11:05:00+01:00</published><updated>2017-10-31T11:05:00+01:00</updated><author><name>Steffen Exler</name></author><id>tag:linuxluigi.com,2017-10-31:/posts/2017/Okt/31/dd/</id><summary type="html">&lt;p class="first last"&gt;Mac &amp;amp; Linux Images auf Speichermedium wie SD-Card &amp;amp; USB Stick aufspielen. Z.B. für Raspberry Pi.&lt;/p&gt;
+</summary><content type="html">&lt;div class="section" id="mac-gerate-auflisten"&gt;
+&lt;h2&gt;Mac Geräte auflisten&lt;/h2&gt;
+&lt;p&gt;Unter mac kann mit &lt;tt class="docutils literal"&gt;diskutil list&lt;/tt&gt; alle Speichergeräte aufgelistet werden&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+diskutil list
+&lt;/pre&gt;
+&lt;p&gt;Beispiel ausgabe&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+/dev/disk0 (internal):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      GUID_partition_scheme                         251.0 GB   disk0
+   1:                        EFI EFI                     314.6 MB   disk0s1
+   2:                 Apple_APFS Container disk1         250.7 GB   disk0s2
+
+/dev/disk1 (synthesized):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      APFS Container Scheme -                      +250.7 GB   disk1
+                                 Physical Store disk0s2
+   1:                APFS Volume Macintosh HD            225.3 GB   disk1s1
+   2:                APFS Volume Preboot                 20.2 MB    disk1s2
+   3:                APFS Volume Recovery                519.9 MB   disk1s3
+   4:                APFS Volume VM                      3.2 GB     disk1s4
+
+/dev/disk2 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:     FDisk_partition_scheme                        *16.0 GB    disk2
+   1:                      Linux                         21.0 MB    disk2s1
+   2:                      Linux                         16.0 GB    disk2s2
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sd-card-oder-usb-stick-iso-erstellen"&gt;
+&lt;h2&gt;SD-Card oder USB Stick ISO erstellen&lt;/h2&gt;
+&lt;p&gt;Mit &lt;tt class="docutils literal"&gt;dd&lt;/tt&gt; lassen sich Datenträger als ISO abilden dabei gibt der Parameter &lt;tt class="docutils literal"&gt;if&lt;/tt&gt; das Quellverzeichnis an &amp;amp; &lt;tt class="docutils literal"&gt;of&lt;/tt&gt;
+das Ziel Verzeichnis. Beispiel beim Backup einer Raspbian SD-Card welches sich unter &lt;tt class="docutils literal"&gt;/dev/disk2&lt;/tt&gt; befindet und auf
+dem Desktop &lt;tt class="docutils literal"&gt;~/Desktop/raspberrypi.dmg&lt;/tt&gt; gesichert werden soll.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo dd bs=1m if=/dev/disk2 of=~/Desktop/raspberrypi.dmg
+&lt;/pre&gt;
+&lt;p&gt;sudo dd bs=100m if=/dev/rdisk2 of=~/Desktop/raspberrypi.dmg
+Dies kann einige Minuten in anspruch nehmen, je nachdem wie groß die SD-Card ist &amp;amp; wie schnell die Datenübertragungsrate
+zwischen der Card und dem PC ist.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="iso-auf-datentrager-aufspielen"&gt;
+&lt;h2&gt;ISO auf Datenträger aufspielen&lt;/h2&gt;
+&lt;p&gt;Wieder mit &lt;tt class="docutils literal"&gt;dd&lt;/tt&gt; lassen sich Datenträger bearbeiten. Diesmal muss fast der gleiche Befehl eingegeben werden wie beim
+erstellen einer ISO File nur &lt;tt class="docutils literal"&gt;if&lt;/tt&gt; &amp;amp; &lt;tt class="docutils literal"&gt;of&lt;/tt&gt; müssen ausgetauscht werden.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+diskutil unmountDisk /dev/disk2
+sudo dd bs=1m if=~/Desktop/raspberrypi.dmg of=/dev/disk2
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mac-sd-card-oder-usb-auswerfen-im-terminal"&gt;
+&lt;h2&gt;Mac SD-Card oder USB auswerfen im Terminal&lt;/h2&gt;
+&lt;p&gt;Mittels &lt;tt class="docutils literal"&gt;diskutil list&lt;/tt&gt; das Ziel Gerät auslesen, meist unter Mac &lt;tt class="docutils literal"&gt;/dev/disk2&lt;/tt&gt; und dann via &lt;tt class="docutils literal"&gt;diskutil unmountDisk device&lt;/tt&gt;
+auswerfen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+diskutil unmountDisk /dev/disk2
+&lt;/pre&gt;
+&lt;/div&gt;
+</content><category term="dd"></category><category term="shell"></category><category term="terminal"></category></entry><entry><title>Daten im Terminal finden -&gt; find</title><link href="https://linuxluigi.com/posts/2017/Okt/31/find/" rel="alternate"></link><published>2017-10-31T11:05:00+01:00</published><updated>2017-10-31T11:05:00+01:00</updated><author><name>Steffen Exler</name></author><id>tag:linuxluigi.com,2017-10-31:/posts/2017/Okt/31/find/</id><summary type="html">&lt;p class="first last"&gt;Linux &amp;amp; Mac daten im Terminal wieder finden, Beispiel kommandos&lt;/p&gt;
+</summary><content type="html">&lt;div class="section" id="datentyp-rekrusiv-suchen"&gt;
+&lt;h2&gt;Datentyp rekrusiv suchen&lt;/h2&gt;
+&lt;p&gt;Um alle Daten mit der Endung &lt;tt class="docutils literal"&gt;txt&lt;/tt&gt; zu in aktuellen und allen unterordner auf zu listen&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+find . -type f -name \*.txt
+&lt;/pre&gt;
+&lt;/div&gt;
+</content><category term="find"></category><category term="shell"></category><category term="terminal"></category></entry><entry><title>SSH Befehle</title><link href="https://linuxluigi.com/posts/2017/Okt/31/ssh/" rel="alternate"></link><published>2017-10-31T11:05:00+01:00</published><updated>2017-10-31T11:05:00+01:00</updated><author><name>Steffen Exler</name></author><id>tag:linuxluigi.com,2017-10-31:/posts/2017/Okt/31/ssh/</id><summary type="html">&lt;p class="first last"&gt;Wichtige &amp;amp; häufige SSH Befehle&lt;/p&gt;
+</summary><content type="html">&lt;div class="section" id="authenfizierung-via-public-key"&gt;
+&lt;h2&gt;Authenfizierung via Public Key&lt;/h2&gt;
+&lt;p&gt;Public Key zum SSH Server hochladen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+ssh-copy-id -i ~/.ssh/id_rsa.pub user&amp;#64;hostname.example.com
+&lt;/pre&gt;
+&lt;div class="section" id="ssh-keyring-alten-fingerprint-entfernen"&gt;
+&lt;h3&gt;SSH Keyring alten Fingerprint entfernen&lt;/h3&gt;
+&lt;p&gt;Wenn der SSH Server neu installiert wurde und versucht man versucht sich mit seinen alten Login Daten ein zu loggen, wird
+folgender Text erscheinen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;
+&amp;#64;    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     &amp;#64;
+&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;&amp;#64;
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:Fd+wUMWEjj/eIcG4p8gs7uZMTjqfIpMr/46LNGW99J4.
+Please contact your system administrator.
+Add correct host key in ~/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in ~/.ssh/known_hosts:33
+ECDSA host key for 192.168.100.100 has changed and you have requested strict checking.
+Host key verification failed.
+&lt;/pre&gt;
+&lt;p&gt;Um den alten Fingerprint nun zu entfernen, kann &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;ssh-keygen&lt;/span&gt;&lt;/tt&gt; verwendet werden mit der folgenden syntax.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+ssh-keygen -R 192.168.100.100
+&lt;/pre&gt;
+&lt;p&gt;Wobei darauf zu achten ist die IP &lt;tt class="docutils literal"&gt;192.168.100.100&lt;/tt&gt; mit der Ziel IP / Domain aus zu tauschen. Danach kann man den
+neuen Fingerprint herunterladen und verifizieren.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content><category term="ssh"></category><category term="keyring"></category><category term="shell"></category><category term="terminal"></category></entry></feed>

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Linuxluigi.com - tutorial</title><link href="https://linuxluigi.com/" rel="alternate"></link><link href="https://linuxluigi.com/feeds/tutorial.atom.xml" rel="self"></link><id>https://linuxluigi.com/</id><updated>2017-10-31T11:05:00+01:00</updated><entry><title>Banana Pi Resilio Sync File Server</title><link href="https://linuxluigi.com/posts/2017/Okt/31/Resilio-Sync-Banana-Pi-Tutorial/" rel="alternate"></link><published>2017-10-31T11:05:00+01:00</published><updated>2017-10-31T11:05:00+01:00</updated><author><name>Steffen Exler</name></author><id>tag:linuxluigi.com,2017-10-31:/posts/2017/Okt/31/Resilio-Sync-Banana-Pi-Tutorial/</id><summary type="html">&lt;p class="first last"&gt;Resilio Sync Banana Pi Tutorial. Sichere dezentrale home cloud.&lt;/p&gt;
+</summary><content type="html">&lt;div class="section" id="voraussetzung"&gt;
+&lt;h2&gt;Voraussetzung&lt;/h2&gt;
+&lt;div class="section" id="ziel"&gt;
+&lt;h3&gt;Ziel&lt;/h3&gt;
+&lt;p&gt;Dieses Tutorial wird ein &lt;a class="reference external" href="http://www.banana-pi.org/m1.html"&gt;Banana Pi M1&lt;/a&gt; mit einer USB Festplatte zu einen &lt;a class="reference external" href="https://www.resilio.com/"&gt;Resilio Sync&lt;/a&gt; dezentralen File Server.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="benotigte-hardware"&gt;
+&lt;h3&gt;Benötigte Hardware&lt;/h3&gt;
+&lt;p&gt;Die Folgende Hardware Liste ist nur ein Beispiel, es muss nicht genau diese kombination gewählt werden, es ist auch
+möglich andere Komponenten zu wählen. Diese hier aufgezählten Produkte haben sich bei mit in der Praxis bewährt und kann
+sie damit auch gut weiter empfelen.&lt;/p&gt;
+&lt;table border="1" class="docutils"&gt;
+&lt;colgroup&gt;
+&lt;col width="15%" /&gt;
+&lt;col width="85%" /&gt;
+&lt;/colgroup&gt;
+&lt;thead valign="bottom"&gt;
+&lt;tr&gt;&lt;th class="head"&gt;&lt;strong&gt;Hardware Typ&lt;/strong&gt;&lt;/th&gt;
+&lt;th class="head"&gt;&lt;strong&gt;Amazon Affiliate Links&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody valign="top"&gt;
+&lt;tr&gt;&lt;td&gt;Micro Server&lt;/td&gt;
+&lt;td&gt;&lt;a class="reference external" href="http://amzn.to/2zkxsvj"&gt;Banana Pi Mark 1&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;SD-Card&lt;/td&gt;
+&lt;td&gt;&lt;a class="reference external" href="http://amzn.to/2A2xwgg"&gt;Samsung EVO Plus Micro SDXC 64GB&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Power Supply&lt;/td&gt;
+&lt;td&gt;&lt;a class="reference external" href="http://amzn.to/2z5Ty3L"&gt;Rydges EU 5V 3A Micro USB Stecker Netzteil&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;USB-Festplatte&lt;/td&gt;
+&lt;td&gt;&lt;a class="reference external" href="http://amzn.to/2iNMyCA"&gt;Western Digital Elements Desktop&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class="figure align-center"&gt;
+&lt;img alt="Banana Pi File Server" src="/images/devices/banana-pi-file-server.jpg" /&gt;
+&lt;p class="caption"&gt;Banana Pi File Server&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="software"&gt;
+&lt;h3&gt;Software&lt;/h3&gt;
+&lt;p&gt;Als Betriebsystem kommt ein Raspbian zum einsatz, welches direkt für den Banana Pi optimiert wurde.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.banana-pi.org/m1-download.html"&gt;http://www.banana-pi.org/m1-download.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Und als File Server Software wird &lt;a class="reference external" href="https://www.resilio.com/"&gt;Resilio Sync&lt;/a&gt; verwendet, da es sehr schnell Daten von einem zum anderen Gerät
+transportiert, gratis in der einsteiger Version und 128 Bit AES end-zu-end verschlüsselt und dezentral (keine Router
+konfiguration nötig).&lt;/p&gt;
+&lt;p&gt;Zur installation werden Teile von &lt;a class="reference external" href="https://github.com/linuxluigi/bananapi_resilio_sync"&gt;https://github.com/linuxluigi/bananapi_resilio_sync&lt;/a&gt; verwendet.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="installation"&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;div class="section" id="betriebsystem-downloaden"&gt;
+&lt;h3&gt;Betriebsystem downloaden&lt;/h3&gt;
+&lt;p&gt;Auf &lt;a class="reference external" href="http://www.banana-pi.org/m1-download.html"&gt;http://www.banana-pi.org/m1-download.html&lt;/a&gt; gehen und Raspbian downloaden &amp;amp; entpacken.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sd-karte-vorbereiten"&gt;
+&lt;h3&gt;SD-Karte vorbereiten&lt;/h3&gt;
+&lt;p&gt;Dieser Part ist für Mac geschrieben aber die Befehle unter Linux sind sehr ähnlich. Windows User sollten auf der
+Offiziellen Raspberry Pi Seite gehen und dort die Anleitung folgen.
+&lt;a class="reference external" href="https://www.raspberrypi.org/documentation/installation/installing-images/"&gt;https://www.raspberrypi.org/documentation/installation/installing-images/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Nachdem die Zip file entpackt wurde im Terminal &lt;tt class="docutils literal"&gt;diskutil list&lt;/tt&gt; eingeben um alle Datenträger an zu zeigen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+/dev/disk0 (internal):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      GUID_partition_scheme                         251.0 GB   disk0
+   1:                        EFI EFI                     314.6 MB   disk0s1
+   2:                 Apple_APFS Container disk1         250.7 GB   disk0s2
+
+/dev/disk1 (synthesized):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:      APFS Container Scheme -                      +250.7 GB   disk1
+                                 Physical Store disk0s2
+   1:                APFS Volume Macintosh HD            225.3 GB   disk1s1
+   2:                APFS Volume Preboot                 20.2 MB    disk1s2
+   3:                APFS Volume Recovery                519.9 MB   disk1s3
+   4:                APFS Volume VM                      3.2 GB     disk1s4
+
+/dev/disk2 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:     FDisk_partition_scheme                        *16.0 GB    disk2
+   1:                      Linux                         21.0 MB    disk2s1
+   2:                      Linux                         16.0 GB    disk2s2
+&lt;/pre&gt;
+&lt;p&gt;Wenn die SD-Karte richtig initialisiert wurde sollte warscheinlich der letzte eintrag die SD-Karte sein &lt;tt class="docutils literal"&gt;/dev/disk2&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Um das Image auf der SC-Karte zu übertragen wird &lt;tt class="docutils literal"&gt;dd&lt;/tt&gt; verwendet.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+diskutil unmountDisk /dev/disk2
+sudo dd bs=1m if=/path/to/2016-07-12-raspbian-lite-bpi-m1-m1p-r1.img of=/dev/disk2
+&lt;/pre&gt;
+&lt;p&gt;Jetzt noch SSH aktivieren indem auf der SD-Karte eine Datei namens &lt;tt class="docutils literal"&gt;ssh.txt&lt;/tt&gt; ohne Inhalt erstellt wird.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo touch /Volumes/BPI-BOOT/ssh.txt
+&lt;/pre&gt;
+&lt;p&gt;Die SD-Karte sollte nun fertig sein und bereit für den Banana Pi. Es kann ab hier auch schon alles an den Pi
+angeschlossen und mit strom versorgt werden.&lt;/p&gt;
+&lt;p&gt;Um die SD-Karte aus zu werfen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+diskutil unmountDisk /dev/disk2
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="raspbian-einrichten"&gt;
+&lt;h3&gt;Raspbian einrichten&lt;/h3&gt;
+&lt;p&gt;Mittels &lt;tt class="docutils literal"&gt;ssh&lt;/tt&gt; auf dem Pi einloggen. Die standart login daten sind: &lt;tt class="docutils literal"&gt;pi/bananapi&lt;/tt&gt; &amp;amp; &lt;tt class="docutils literal"&gt;root/bananapi&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+ssh pi&amp;#64;raspberrypi
+&lt;/pre&gt;
+&lt;p&gt;Nach dem einloggen am besten gleich das File System erweitern (Expand Filesystem). Dafür die &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;raspi-config&lt;/span&gt;&lt;/tt&gt; verwenden,
+in der Offiziellen Dokumentation sind die einzelnen Steps sehr ausführlich beschrieben &amp;amp; was noch alles mit &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;raspi-config&lt;/span&gt;&lt;/tt&gt;
+gemacht werden kann: &lt;a class="reference external" href="https://www.raspberrypi.org/documentation/configuration/raspi-config.md"&gt;https://www.raspberrypi.org/documentation/configuration/raspi-config.md&lt;/a&gt;&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo raspi-config
+sudo reboot
+&lt;/pre&gt;
+&lt;p&gt;Mittels &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;raspi-config&lt;/span&gt;&lt;/tt&gt; oder &lt;tt class="docutils literal"&gt;passwd&lt;/tt&gt; das root &amp;amp; user passwort ändern.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo raspi-config
+passwd
+sudo passwd
+&lt;/pre&gt;
+&lt;p&gt;Als nächstes das System updaten.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo apt-get update
+sudo apt-get dist-upgrade
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="usb-festplatte-mounten"&gt;
+&lt;h3&gt;USB-Festplatte mounten&lt;/h3&gt;
+&lt;p&gt;Um zu sehen ob die USB Festplatte richtig angeschlossen ist &lt;tt class="docutils literal"&gt;sudo blkid &lt;span class="pre"&gt;-s&lt;/span&gt; UUID&lt;/tt&gt; ausführen und es
+sollte so ähnlich aussehen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+/dev/mmcblk0p1: UUID=&amp;quot;35CB-ED62&amp;quot;
+/dev/mmcblk0p2: UUID=&amp;quot;2cfc428f-9afc-4036-8533-bb437fd1bc36&amp;quot;
+/dev/sda1: UUID=&amp;quot;a6c240d4-0f07-46b4-adcd-b9e32117a74b&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;Wenn unter &lt;tt class="docutils literal"&gt;dev/sda1&lt;/tt&gt; auch ein Datenträger angezeigt wird, kann die Festplatte nun formatiert werden.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo mkfs.ext4 -t /dev/sda1
+&lt;/pre&gt;
+&lt;p&gt;Damit die nun frisch formatierte festplatte gemountet werden kann, muss noch ein Ordner erstellt werden, wo die Festplatte
+später auf zu finden sein wird. In diesen Beispiel wird der Ordner unter &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;/srv/resilio-sync/&lt;/span&gt;&lt;/tt&gt; sein.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo mkdir /srv/resilio-sync/
+&lt;/pre&gt;
+&lt;p&gt;Und mit dem folgenden Befehl wird die Festplatte mit jeden start automatisch unter &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;/srv/resilio-sync/&lt;/span&gt;&lt;/tt&gt; gemountet.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo sh -c &amp;quot;echo '/dev/sda1 /srv/resilio-sync ext4 defaults,noatime,nodiratime,commit=600,errors=remount-ro 0 1' &amp;gt;&amp;gt; /etc/fstab&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;Mit &lt;tt class="docutils literal"&gt;sudo mount &lt;span class="pre"&gt;-a&lt;/span&gt;&lt;/tt&gt; kann die Festplatte auch sofort gemountet werden.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="resilio-sync-installieren"&gt;
+&lt;h3&gt;Resilio-Sync installieren&lt;/h3&gt;
+&lt;p&gt;Resilio Sync lässt sich einfach aus der Repo heraus installieren:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+echo 'deb http://linux-packages.resilio.com/resilio-sync/deb resilio-sync non-free' | sudo tee --append /etc/apt/sources.list.d/resilio-sync.list &amp;gt; /dev/null
+wget -qO - https://linux-packages.resilio.com/resilio-sync/key.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install -y resilio-sync
+# user rslsync
+sudo systemctl enable resilio-sync
+&lt;/pre&gt;
+&lt;p&gt;Noch die Daten &amp;amp; Backup Ordner erstellen und &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;resilio-sync&lt;/span&gt;&lt;/tt&gt; User schreibrechte erteilen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo mkdir /srv/resilio-sync/server
+sudo mkdir /srv/resilio-sync/backup
+sudo chown -R rslsync:rslsync /srv/resilio-sync
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="backup"&gt;
+&lt;h3&gt;Backup&lt;/h3&gt;
+&lt;p&gt;In diesen Tutorial wird &lt;tt class="docutils literal"&gt;rsnapshot&lt;/tt&gt; verwendet, es erstellt im Stundentakt Hardlinks von allen Datein und kann mit
+dieser Technik Stündlich Backups über einer Woche erstellt werden und benötigt in einigen fällen 10% und weniger Speicher
+als die Eigentlichen Daten. Jedes Backup wird innerhalb weniger Sekunden erstellt bis auf das erste. Diese Backup
+Version sollte nur verwendet werden wenn mehr als ein Resilio File Server zum einsatz kommt, das wichtige Daten mehrfach
+physisch existieren!&lt;/p&gt;
+&lt;p&gt;&lt;tt class="docutils literal"&gt;rsnapshot&lt;/tt&gt; installieren:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo apt-get install -y rsnapshot
+&lt;/pre&gt;
+&lt;p&gt;Das folgende Script ist sorgt dafür das der Ordner &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;/srv/resilio-sync/server&lt;/span&gt;&lt;/tt&gt; im Verzeichnis &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;/srv/resilio-sync/backup&lt;/span&gt;&lt;/tt&gt;
+gesichert wird.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo sh -c &amp;quot;echo 'backup\t/srv/resilio-sync/server/\tlocalhost' &amp;gt;&amp;gt; /etc/rsnapshot.conf&amp;quot;
+sudo sed -i 's!snapshot_root\t/var/cache/rsnapshot/!snapshot_root\t/srv/resilio-sync/backup!g' /etc/rsnapshot.conf
+&lt;/pre&gt;
+&lt;p&gt;Die Backup intervalle sind in der Datei &lt;tt class="docutils literal"&gt;/etc/rsnapshot.conf` unter der Sektion `BACKUP INTERVALS&lt;/tt&gt; zu bearbeiten.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="security"&gt;
+&lt;h3&gt;Security&lt;/h3&gt;
+&lt;p&gt;Als wichtigtest ist es die Passwörter von pi &amp;amp; root zu ändern, wie schon bei der Installation beschrieben. Das geht mit.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+# for pi user
+passwd
+# for root user
+sudo passwd
+&lt;/pre&gt;
+&lt;p&gt;Der nächste Step ist zum login nur noch SSH Public Keys zu verwenden. Dazu am besten
+im Ubuntu wiki nachlesen wie es zu machen ist &lt;a class="reference external" href="https://wiki.ubuntuusers.de/SSH/#PubKeys"&gt;https://wiki.ubuntuusers.de/SSH/#PubKeys&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Wenn die Authenfizierung mit Public-Key funktioniert und auch nur wenn! Dann den Root user via SSH aussperren &amp;amp; der
+Passwort login deaktivieren.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+# secure ssh
+sudo sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin no/g' /etc/ssh/sshd_config
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+# reload ssh server
+sudo /etc/init.d/ssh reload
+&lt;/pre&gt;
+&lt;p&gt;Zum Schluss noch automatisch Sicherheits-Updates installieren lassen.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+# activate auto install security updates
+sudo apt-get -y install unattended-upgrades
+sudo sh -c &amp;quot;echo 'APT::Periodic::Update-Package-Lists &amp;quot;1&amp;quot;;' &amp;gt; /etc/apt/apt.conf.d/10periodic&amp;quot;
+sudo sh -c &amp;quot;echo 'APT::Periodic::Update-Package-Lists &amp;quot;1&amp;quot;;' &amp;gt;&amp;gt; /etc/apt/apt.conf.d/10periodic&amp;quot;
+sudo sh -c &amp;quot;echo 'APT::Periodic::Download-Upgradeable-Packages &amp;quot;1&amp;quot;;' &amp;gt;&amp;gt; /etc/apt/apt.conf.d/10periodic&amp;quot;
+sudo sh -c &amp;quot;echo 'APT::Periodic::AutocleanInterval &amp;quot;7&amp;quot;;' &amp;gt;&amp;gt; /etc/apt/apt.conf.d/10periodic&amp;quot;
+sudo sh -c &amp;quot;echo 'APT::Periodic::Unattended-Upgrade &amp;quot;1&amp;quot;;' &amp;gt;&amp;gt; /etc/apt/apt.conf.d/10periodic&amp;quot;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="cronjobs"&gt;
+&lt;h3&gt;Cronjobs&lt;/h3&gt;
+&lt;p&gt;Cronjobs lassen sich leicht via &lt;tt class="docutils literal"&gt;anacron&lt;/tt&gt; verwalten.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+sudo apt-get -y install anacron
+&lt;/pre&gt;
+&lt;div class="section" id="id1"&gt;
+&lt;h4&gt;Backup&lt;/h4&gt;
+&lt;p&gt;Folgendes Script sorgt dafür, dass rsnapshot Stündlich, Täglich &amp;amp; Wöchentlich ausgeführt wird.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+# hourly
+sudo wget https://raw.githubusercontent.com/linuxluigi/bananapi_resilio_sync/master/cron/hourly/rsnapshot.sh -O /etc/cron.hourly/rsnapshot
+sudo sed -i 's/alpha/hourly/g' /etc/cron.hourly/rsnapshot
+sudo chmod +x /etc/cron.hourly/rsnapshot
+# daily
+sudo wget https://raw.githubusercontent.com/linuxluigi/bananapi_resilio_sync/master/cron/daily/rsnapshot.sh -O /etc/cron.daily/rsnapshot
+sudo chmod +x /etc/cron.daily/rsnapshot
+sudo sed -i 's/beta/daily/g' /etc/cron.daily/rsnapshot
+# weekly
+sudo wget https://raw.githubusercontent.com/linuxluigi/bananapi_resilio_sync/master/cron/weekly/rsnapshot.sh -O /etc/cron.weekly/rsnapshot
+sudo chmod +x /etc/cron.weekly/rsnapshot
+sudo sed -i 's/gamma/weekly/g' /etc/cron.weekly/rsnapshot
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class="section" id="stability"&gt;
+&lt;h4&gt;Stability&lt;/h4&gt;
+&lt;p&gt;Nach meinen langzeit Erfahrung empfielt es sich bei Resilio Sync auf ein ARM Board es lieber am Tag ein mal neu zu starten
+falls ein Prozess sich abwürgt. Dies passiert sehr selten aber durch tägliches neustarten funktioniert das System 24/7
+ohne weitere Wartung auch bei großen Datenmengen. :)&lt;/p&gt;
+&lt;p&gt;Außerdem ist sollte der Zeitserver stündlich geupdatet werden, da Resilio Sync Daten nur Daten transferiert wenn alle
+Geräte die gleiche Intere Zeit besitzten und wenn ein Pi aus dem Strom genommen wird, ist dieser nicht mehr Syncron.
+Anders bei Desktop, Laptop oder größeren Servern wo eine interne Batterie die Zeit sichert.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+# daily reboot the pi
+sudo wget https://raw.githubusercontent.com/linuxluigi/bananapi_resilio_sync/master/cron/daily/resilio-restart.sh -O /etc/cron.daily/resilio-restart
+sudo chmod +x /etc/cron.daily/resilio-restart
+
+# cron ntp time hourly
+sudo apt-get -y install ntp ntpdate
+ntpdate -s 0.de.pool.ntp.org
+sudo wget https://raw.githubusercontent.com/linuxluigi/bananapi_resilio_sync/master/cron/hourly/ntpdate.sh -O /etc/cron.hourly/ntpdate
+sudo chmod +x /etc/cron.hourly/ntpdate
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="resilio-sync-einrichten"&gt;
+&lt;h3&gt;Resilio Sync einrichten&lt;/h3&gt;
+&lt;p&gt;Wenn alles geklappt habt könnt ihr euch auf eurern Pi mit dem Port &lt;tt class="docutils literal"&gt;8888&lt;/tt&gt; in der Web GUI von Resilio Sync einloggen.&lt;/p&gt;
+&lt;p&gt;In den Einstellungen muss noch der Standart Ordner eingestellt werden &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;/srv/resilio-sync/server&lt;/span&gt;&lt;/tt&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content><category term="banana pi"></category><category term="raspberry pi"></category><category term="Resilio Sync"></category><category term="Bittorent Sync"></category><category term="home Server"></category><category term="file server"></category></entry></feed>
