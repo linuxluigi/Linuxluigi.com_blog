@@ -7,5 +7,5 @@ Using https://blog.getpelican.com
 ````bash
 $ pelican content -o output -s pelicanconf.py
 $ ghp-import output
-$ git push -f origin gh-pages
+$ git push origin gh-pages
 ````
