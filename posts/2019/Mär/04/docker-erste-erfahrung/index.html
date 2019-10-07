@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="../../../../../theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../../../theme/font-awesome/css/font-awesome.min.css">
+
+    <link href="../../../../../static/custom.css" rel="stylesheet">
+
+    <link href="https://linuxluigi.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Linuxluigi.com Atom">
+
+
+    <link rel="shortcut icon" href="https://linuxluigi.com/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://linuxluigi.com/images/favicon.ico" type="image/x-icon">
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#333">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#333">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="author" content="Steffen Exler" />
+<meta name="description" content="Mein erstes Docker Erlebnis in der Uni" />
+<meta name="keywords" content="docker, erfahrung">
+<meta property="og:site_name" content="Linuxluigi.com"/>
+<meta property="og:title" content="Banana Pi Resilio Sync File Server"/>
+<meta property="og:description" content="Mein erstes Docker Erlebnis in der Uni"/>
+<meta property="og:locale" content="de_DE"/>
+<meta property="og:url" content="../../../../../posts/2019/Mär/04/docker-erste-erfahrung/"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2019-03-04 18:50:00+01:00"/>
+<meta property="article:modified_time" content="2019-03-04 18:50:00+01:00"/>
+<meta property="article:author" content="../../../../../author/steffen-exler.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="docker"/>
+<meta property="article:tag" content="erfahrung"/>
+<meta property="og:image" content="https://linuxluigi.com/images/profile.png">
+
+  <title>Linuxluigi.com &ndash; Banana Pi Resilio Sync File Server</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="../../../../..">
+        <img src="https://linuxluigi.com/images/profile.png" alt="Linuxluigi Blog" title="Linuxluigi Blog">
+      </a>
+      <h1><a href="../../../../..">Linuxluigi Blog</a></h1>
+
+<p>Coding & Admin stuff</p>
+      <nav>
+        <ul class="list">
+          <li><a href="../../../../../pages/datenschutzerklarung.html#datenschutzerklarung">Datenschutzerklärung</a></li>
+          <li><a href="../../../../../pages/impressum.html#impressum">Impressum</a></li>
+
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/linuxluigi" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-rss" href="//linuxluigi.com/feeds/all.atom.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="../../../../..">    Home
+</a>
+
+
+      <a href="https://linuxluigi.com/feeds/all.atom.xml">    Atom
+</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+    <h1 id="docker-erste-erfahrung">Banana Pi Resilio Sync File Server</h1>
+    <p>
+          Posted on Mo 04 März 2019 in <a href="../../../../../category/blog.html">blog</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <div class="section" id="einleitung">
+<h2>Einleitung</h2>
+<p>Im letzten Semster mussten wir zu 8 die Webiste des HTW-Computermuseums neu gestalten. Leider stellten wir während des
+Projektes fest, dass die Server Infrastruktur neu erstellt werden muss. So diskutierten wir im Team, was für Möglichkeiten
+es gibt, die folgende Kriterien erfüllen:</p>
+<ul class="simple">
+<li><strong>Projekt Versionierung:</strong> Damit die getätigten Änderungen am System immer protokolliert werden müssen und auch
+Designänderungen leicht durchzuführen sind.</li>
+<li><strong>Multiple Instanzen:</strong> Entwicklungsumgebung, Staging Server &amp; Produktion Server sollen möglichst identisch sein.</li>
+<li><strong>Einheitliche Entwicklungsumgebung:</strong> Entwicklungsumgebung soll leicht zu installieren sein und auf Linux, Mac &amp;
+Windows ohne großen Zeitaufwand einrichtbar sein.</li>
+<li><strong>Keine extra kosten:</strong> die verwendete Software sollte keine Extrakosten durch Lizensen verursachen.</li>
+<li><strong>Sandboxing:</strong> Möglich Sandboxing von Microservices.</li>
+</ul>
+<p>Docker hat alle diese Voraussetzung erfüllt und ich persönlich freute mich endlich einmal Zeit zu nehmen, um mich in Docker
+einzuarbeiten :)</p>
+</div>
+<div class="section" id="die-ersten-2-wochen">
+<h2>Die ersten 2 Wochen</h2>
+<p>Hierbei sei gesagt, ich habe im Durchschnitt 1 bis 2 Tage die Woche am Projekt gearbeitet, aber vor dem Schlafengehen
+oder in der Bahn mir mehrere Dokumenationen von Docker angesehen.</p>
+<p>Die Anfangszeit war etwas schwer, ich verstand schnell, wie ich mittels einer Dockerfile ein Linux-Container aufsetzen kann.
+Wie ich aus verschiedene Linux Distros wähle und mir mein Wunschsystem zusammenstelle. Doch einfache Websites mit SSL
+und Domain Weiterleitung erschienen mir äußerst kompliziert, sowie wie eine Dockerfile mit Git versioniert werden ohne
+Docker Hub.</p>
+<p>In laufe der Zeit kam ich dann langsam zu Docker-Compose, wo ich mehrere Docker-Container in einer Datei verwalten konnte.
+Auch die Verwendung von Enviroment Variablen verstand ich so langsam. So dass Domains und Logindaten nicht länger
+hardcoded werden müssen. <cite>Yeah :)</cite></p>
+</div>
+<div class="section" id="traefik-http-reverse-proxy-load-balancer">
+<h2>Traefik - HTTP reverse proxy &amp; load balancer</h2>
+<p>Nach einer Zeit bin ich dann auf <a class="reference external" href="https://traefik.io/">Traefik</a> gestoßen. Ein HTTP <cite>reverse proxy und load balancer</cite>, praktischerweise
+gibt es auch offiziellen Docker Support von Traefik. So konnte ich auf einmal sehr leicht automatische SSL Zertifikate
+von Let's Encrypt erstellen. Nun bekam jeder Website Container sein eigenes SSL Zertifikat. Auch enthält Traefik ein
+Domain Routing, nun war es möglich für mehrere Domains innerhalb einer Docker Compose File zu verwalten. Die <cite>www</cite>
+Subdomain zeigte dabei auf den Wordpress Container, <cite>db-admin</cite> auf Adminer &amp; <cite>admin</cite> auf Collective Access.</p>
+<p>Nachdem ich so langsam mit Traefik zurecht kam und mir die Doku diesbezüglich durchgelesen habe, fing ich an
+Docker-Compose immer mehr zu feiern. So überlegte ich auch, wie praktisch die Software in anderen Projekten ist und wie
+leicht diese zu verwalten ist.</p>
+<p>Ich war nun von Docker gefesselt!</p>
+</div>
+<div class="section" id="collective-access-museums-ausstellungsstucke-verwaltungs-software">
+<h2>Collective Access - Museums Ausstellungsstücke Verwaltungs Software</h2>
+<p><a class="reference external" href="https://www.collectiveaccess.org/">Collective Access</a> ist die Verwaltungswebsite von dem Computer Museum. Diese sollte natürlich auch in Docker-Compose
+integriert werden. Diese Aufgabe war die schwierigste.</p>
+<p>Als Erstes schauten wir, ob ein Docker Image für Collective Access existiert, dies war zwar der Fall, doch wurde
+dieses Image nicht mehr aktiv gewartet und fiel dadurch aus.</p>
+<p>Als Nächstes probierte ich ein simplen NGINX Container mit PHP zu erstellen. Collective Access sollte in diesem Versuch
+im Docker-Compose vollständig heruntergeladen werden. So lud ich Collective Access Git Repo innerhalb des Docker-Compose
+Projektes herunter. Das funktionierte anfangs relativ gut, doch war der Aufbau ziemlich unstabil. Wenn ich die Ordner
+Strukture ändern wollte, waren die Git Links nicht gleichzeitig aktualisiert worden. Auf anderen Geräten wurde
+Collective Access nicht immer heruntergeladen. Das größte Problem war aber, dass die Zugriffsrechte nicht richtig gesetzt
+waren mit diesem Ansatz... Zu viele Probleme, also ein anderer Weg muss her.</p>
+<p>Der nächste Weg war es den NGINX Docker Container zu bearbeiten und dort Collective Access zu laden. Am Anfang versuchte
+ich mir einen komplett eigenen NGINX Container zu erstellen, was aber doch zu viel Zeit benötigte. Einige Abschnitte
+des Testens benötigiten mehrere Minuten um die Änderungen zu testen.</p>
+<p>So viel Zeit hatte ich leider nicht und schaute im Internet, was es noch für Lösungen gab. Ich fand <a class="reference external" href="https://gitlab.com/ric_harvey/nginx-php-fpm">nginx-php-fpm</a>
+ein Docker Image welches NGINX, PHP &amp; Git enthielt. Über Enviroment Variablen war es auch möglich eigene Git URLs &amp;
+Git Tags zu übergeben. So lädt sich der Container am ersten Start das aktuelle Git Repo herunter und spring danach auf den
+gewünschten Tag. Auch konnte ich schnell eine Config File für Collective Access erstellen, welches auch auf dem Container
+deployed wird.</p>
+<p>So weit so gut. Nun lief der Container grundlegend. Aber was ich bislang übersah, Collective Access wurde bislang nur
+für Apache Webserver entwickelt und die NGINX Unterstützung sollte erst in den kommenden Versionen folgen. Das Hauptproblem
+war dabei die <cite>.htaccess</cite> Datein. Diese Datein werden nur von Apache gelesen und nicht von NGINX. So musste ich anfangen
+die <cite>.htaccess</cite> Datein in NGINX zu übersetzen. Dies benötigte zwar etwas Arbeit, war aber leichter als ein Apache
+Docker Container zu erstellen.</p>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="../../../../../tag/docker.html">docker</a>
+      <a href="../../../../../tag/erfahrung.html">erfahrung</a>
+    </p>
+  </div>
+
+
+
+
+</article>
+
+    <footer>
+<p>
+  &copy; Steffen Exler 2017 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Linuxluigi.com ",
+  "url" : "../../../../..",
+  "image": "https://linuxluigi.com/images/profile.png",
+  "description": "Coding & admin stuff blog"
+}
+</script>
+</body>
+</html>

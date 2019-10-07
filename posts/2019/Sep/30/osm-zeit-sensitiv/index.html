@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="../../../../../theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../../../theme/font-awesome/css/font-awesome.min.css">
+
+    <link href="../../../../../static/custom.css" rel="stylesheet">
+
+    <link href="https://linuxluigi.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Linuxluigi.com Atom">
+
+
+    <link rel="shortcut icon" href="https://linuxluigi.com/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://linuxluigi.com/images/favicon.ico" type="image/x-icon">
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#333">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#333">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="author" content="Steffen Exler" />
+<meta name="description" content="5 Monate Arbeit an ein eigenen OpenStreetMap Tile Server der Zeitangaben akzeptiert" />
+<meta name="keywords" content="Docker, Erfahrung, OHDM, OSM, Django, Flask">
+<meta property="og:site_name" content="Linuxluigi.com"/>
+<meta property="og:title" content="Eigener OpenStreetMap Tile-Server mit Zeitsensitivität"/>
+<meta property="og:description" content="5 Monate Arbeit an ein eigenen OpenStreetMap Tile Server der Zeitangaben akzeptiert"/>
+<meta property="og:locale" content="de_DE"/>
+<meta property="og:url" content="../../../../../posts/2019/Sep/30/osm-zeit-sensitiv/"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2019-09-30 18:00:00+02:00"/>
+<meta property="article:modified_time" content="2019-10-07 18:12:00+02:00"/>
+<meta property="article:author" content="../../../../../author/steffen-exler.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="Docker"/>
+<meta property="article:tag" content="Erfahrung"/>
+<meta property="article:tag" content="OHDM"/>
+<meta property="article:tag" content="OSM"/>
+<meta property="article:tag" content="Django"/>
+<meta property="article:tag" content="Flask"/>
+<meta property="og:image" content="https://linuxluigi.com/images/profile.png">
+
+  <title>Linuxluigi.com &ndash; Eigener OpenStreetMap Tile-Server mit Zeitsensitivität</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="../../../../..">
+        <img src="https://linuxluigi.com/images/profile.png" alt="Linuxluigi Blog" title="Linuxluigi Blog">
+      </a>
+      <h1><a href="../../../../..">Linuxluigi Blog</a></h1>
+
+<p>Coding & Admin stuff</p>
+      <nav>
+        <ul class="list">
+          <li><a href="../../../../../pages/datenschutzerklarung.html#datenschutzerklarung">Datenschutzerklärung</a></li>
+          <li><a href="../../../../../pages/impressum.html#impressum">Impressum</a></li>
+
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/linuxluigi" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-rss" href="//linuxluigi.com/feeds/all.atom.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="../../../../..">    Home
+</a>
+
+
+      <a href="https://linuxluigi.com/feeds/all.atom.xml">    Atom
+</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+    <h1 id="osm-zeit-sensitiv">Eigener OpenStreetMap Tile-Server mit Zeitsensitivität</h1>
+    <p>
+          Posted on Mo 30 September 2019 in <a href="../../../../../category/blog.html">blog</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <div class="section" id="einleitung">
+<h2>Einleitung</h2>
+<p>Es fing damit an, dass ich ein Projekt in den Fach Ortsbasierten Informationssysteme ausarbeiten sollte. Das Projekt sollte zu
+80% in meiner Note einfließen. Ursprünglich wollte ich nur die vorhandenen Systeme Dokumentieren und Grafisch aufbereiten.
+Doch schon bei der Dokumentation des erstens Projekt, mit Hilfe von Mapnik ein eigenen OpenStreetMap Tile Server zu
+erstellen welcher Zeitangaben akzeptiert, hatte ich aufgehört zu Dokumentieren und fing an dem Team zu helfen, welches das System
+zum laufen zu bringen soll. Immer mehr habe ich mich in dem Team eingearbeitet und fing an umfangreich Code beizusteuern.
+So habe ich erst ein Docker System aufgebaut wo einen normalen Mapnik Tile-Server drauf lief und lernte erst einmal die
+einzelnen Komponenten kennen. Am Anfang dachte ich erst man müsste den OpenStreetMap Tile Server aufbohren und ihn
+beibringen Zeitangaben zu akzeptieren. Doch mein Prof hat mir schnell erklärt das er vom forken nicht viel hält, da es
+schwer zu warten ist und so ein Uniprojekt müsse einfach bleiben.</p>
+<p>Na gut dann halt etwas anderes. Der nächste Ansatz war für mich mit Flask &amp; Python ein eigenen Tile Server zu schreiben.
+Das ging ziemlich flott, nachdem ich herausbekommen habe welche Abhängigkeiten alles benötigt werden.
+Der nächste Schritt war anschließend die Abhängigkeit <a class="reference external" href="https://github.com/gravitystorm/openstreetmap-carto">https://github.com/gravitystorm/openstreetmap-carto</a> die Zeitangaben
+bei zu bringen. Auch hier versuchte ich mein Glück und fragte den Prof ob wir nicht wenigstens dieses Projekt forken
+können, es muss hier auch nur eine Datei gewartet werden. Die Datei welche die SQL beinhaltet. Das sollte nicht so schwer
+zu warten sein, meinte ich. Aber auch hier war seine Antwort, dass er sicher lieber ein Tool wünscht welches die <cite>project.mml</cite> Zeit
+sensitiv macht. Nun gut, mein Team braucht ja auch Aufgaben und wollten sich diesen Punkt widmen. Mir war es recht, denn so
+konnte ich mich ungestört der Webentwicklung konzentrieren. Yeah 😎</p>
+</div>
+<div class="section" id="der-simple-tile-server">
+<h2>Der Simple Tile-Server</h2>
+<p>Da mein Prof es möglich simple haben wollte, habe ich den Webserver zuerst als eine Flask App geschrieben. Innerhalb von
+100 Zeilen Code &amp; Kommentaren war der Tile Server mit ein einfachen Caching geschrieben. Etwas zäh und in meinen Augen
+nicht Produktionsreif aber der Proof-of-Concept war damit geschaffen. Als nächstes wollte ich noch eine Tile-Producer-Queue
+hinzufügen. So das eine Tile URL nur ein Tile vom System erstellt wird und nicht wenn mehrere User die URL
+gleichzeitig aufrufen, dass das Tile mehrfach parallel erstellt wird. Aber mein Prof rudert mich auch hier wieder zurück
+:'( ich sollte doch lieber die Dokumentation schreiben und es wartungsfreundlich zu machen.
+Nun gut, den Punkt verstehe ja. Also Dokumentation schreiben und gut ist.</p>
+</div>
+<div class="section" id="der-komplexe-tile-server">
+<h2>Der Komplexe Tile-Server</h2>
+<p>Der simple Server war ja fertig und mein Team war mit den SQL Part beschäftigt. Ich hatte keine Vorlesungen und Zeit. So konnte
+mich meinen Entwickler Herz frei hingeben, etwas nebenbei Arbeiten und mich weiter in der Materie einlesen.
+Ich arbeite liebend gerne mit dem Web-Framework Django. Das ist das große Python Web Framework, wie geschaffen für eine
+solch komplexe Aufgabe dachte ich mir. Die erste Frage die ich mir stellte, kann Django die OpenStreetMap Datenbank mappen?
+In diversen Foren &amp; Stackoverflow gab es diesbezüglich viele Anfragen aber keine direkte Lösung. Also recherchierte ich
+weiter ob Django ORM Tool es zulässt eine bestehende Datenbank als ein Django Model zu konvertieren und siehe da, Django
+kann es Wuhuu 😁
+Das ich jetzt mehrere Tage brauchte um ein Docker Container zu erstellen wo Django mit PostGis Unterstützung läuft, sei
+jetzt mal dahin gestellt. Für mich fühlte es sich nur wie wenige Stunden an 😝
+Jetzt nur noch kurz probieren ob ich ein Tile auf die Datenbank projektieren kann ... ... Ja es geht und die Abfrage
+von wann bis wann die das Tile valide ist, work like a Charme.
+Ich fühlte mich zwar etwas schlecht dabei, das ich schon so viel probierte. Da ich mein Prof mir anbot meine
+Bachelorarbeit in dem Thema zu schreiben (Tile Caching mit Zeitraum Angabe) aber es fühlte sich zu simple an.
+Ich wollte mehr und steigerte mich weiter rein.</p>
+<p>Nun gut das Tile Caching war innerhalb eines Vormittags so weit angepasst, das der Server nun ein Zeitraum festlegen
+konnte von wann bis wann das Tile valide ist.</p>
+<p>Der nächste Schritt, die Tile Producer Queue. Die war schon etwas kniffliger. Hierzu nutze ich Celery, ein Tool
+um Aufgaben in extra Container und einer Producer Queue zu lösen. Da ich noch nie Celery bevor nutze musste ich mich
+erst einmal einige Stunden einlesen was das überhaupt ist und zu was man es verwenden kann. Um so mehr ich mich einlas
+um so mehr war ich der Meinung das es das Tool ist was ich brauche. Also Ärmel hochgekrempelt, Dinkelkaffe geschnappt
+und ran ans Werk.
+Damit gleich das Caching richtig integriert ist, habe ich erst einmal ein Django Model erstellt, welches Informationen
+über bereits erstellte Tiles &amp; Tiles die gerade bearbeitet werden erstellt. So konnte ich schon einmal sicherstellen
+das ein Tile nur einmal bearbeitet wird und ein zweiter User das Tile von den Request zuvor erhält. Die Ausgabe der Tiles
+erfolgt bei beiden Usern gleichzeitig, sobald es halt fertig ist :) Um die Performance hoch zu halten werden die fertigen
+Tiles nicht in der Datenbank gesichert sondern in einem Redis Cache hochgeladen, welcher mir auch die Aufgabe abnimmt, alte
+und nicht mehr benötigte Tiles automatisch aus dem System zu löschen.</p>
+<p>Aber auch hier war die Arbeit in ein bis zwei Tagen gut erledigt und ich war zufrieden und konnte etwas durchatmen und
+von Projekt in ruhe Abstand nehmen.</p>
+</div>
+<div class="section" id="der-sql-part">
+<h2>Der SQL Part</h2>
+<p>Ja eigentlich war es der Plan das meine Kollegen sich mit dem Thema beschäftigen aber sie hatten Probleme und wir trafen
+uns gemeinsam. Okay, an sich kein Problem, ich wollte mich für meine Bachelorarbeit eh mehr mit der OSM Datenbank
+beschäftigen.
+Nach einigen Stunden gemeinsam am Tool arbeiten welches die <cite>project.mml</cite> Zeit sensitiv machen soll, gaben wir auf ...
+Wir sahen kein Ende der Arbeit. Sobald wir einige Statements fertigstellen haben, haben wir diese an einer anderen Stelle
+zerstört. Also hat einer aus dem SQL Team die Aufgabe übernommen die SQL Statements per Hand zu ändern und das
+Projekt zu forken <a class="reference external" href="https://github.com/linuxluigi/openstreetmap-carto/">https://github.com/linuxluigi/openstreetmap-carto/</a></p>
+<p>Damit mein Kollege das Projekt gut bearbeiten kann, habe ich extra Debug URL's eingefügt, so das die <cite>project.mml</cite>
+mithilfe von <cite>carto</cite> zu einer <cite>style.xml</cite> zu konvertieren, welche der Tile-Server akzeptiert. An sich sehr praktisch
+um an dem System langfristig zu arbeiten. Bei der Gelegenheit habe ich auch gleich eine URL eingefügt, wo ein normales
+Tile erstellt wird, welches nicht Zeit sensitiv sind.</p>
+</div>
+<div class="section" id="die-dokumention-travis">
+<h2>Die Dokumention &amp; Travis</h2>
+<p>Die Dokumentation ging recht flott von der Hand. In Gedanken überlegte ich zwar was ich vergessen habe aufzuschreiben
+aber in großen und ganzen sollte das meiste dabei sein, der Rest kommt halt nach.
+Was mich aber viel mehr fertig machte ... testen mit <cite>TRAVIS</cite>, an sich läuft es gut aber sobald ich versuchte in Travis
+<cite>Postgis</cite> zu integrieren kamen bei mir immer Fehler. Das Problem dabei war auch, jeder Test dauerte zwischen 15 bis 45
+Minuten... Aber auch nach Tagen keine Lösung. Egal, lass es erst einmal sacken vielleicht fällt mir ja später was ein.
+Heute nun habe ich auf Reddit mein Projekt vorgestellt -&gt; <a class="reference external" href="https://www.reddit.com/r/django/comments/db8jvb/feedback_for_a_time_sensitive_openstreetmap/">https://www.reddit.com/r/django/comments/db8jvb/feedback_for_a_time_sensitive_openstreetmap/</a></p>
+<p>Nach 8 Stunden kam das erste Feedback zu mein großes Problem <cite>TRAVIS</cite>. Der User meinte, ich könnte es doch mit Docker
+lösen -.- warum ich mir die Arbeit mache 2 Systeme aufzubauen. Nun weiß ich was ich morgen Probieren werden.</p>
+</div>
+<div class="section" id="fazit">
+<h2>Fazit</h2>
+<p>Ich bin ziemlich happy über das Ergebnis, es ist zwar noch etwas Arbeit um es Produktion fähig zu machen aber es
+ist Absehbar. Die nächste Aufgabe wird hoffentlich sein, die Zukunft abzubilden. Ein Kartenmaterial zu erzeugen welches
+den steigenden Meeresspiegel simuliert, mein Prof hat grundsätzlich gemeint das es funktionieren sollte. Ich werde
+diesbezüglich noch etwas recherchieren und mit etwas Glück wird das nun meine Bachelorarbeit 😉</p>
+</div>
+<div class="section" id="update-zu-travis">
+<h2>Update zu Travis</h2>
+<p>Kurz um, es läuft super. Die Test laufen nun auch viel schneller durch und ich kann gleichzeitig die Docker Container testen.</p>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="../../../../../tag/docker.html">Docker</a>
+      <a href="../../../../../tag/erfahrung.html">Erfahrung</a>
+      <a href="../../../../../tag/ohdm.html">OHDM</a>
+      <a href="../../../../../tag/osm.html">OSM</a>
+      <a href="../../../../../tag/django.html">Django</a>
+      <a href="../../../../../tag/flask.html">Flask</a>
+    </p>
+  </div>
+
+
+
+
+</article>
+
+    <footer>
+<p>
+  &copy; Steffen Exler 2017 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " Linuxluigi.com ",
+  "url" : "../../../../..",
+  "image": "https://linuxluigi.com/images/profile.png",
+  "description": "Coding & admin stuff blog"
+}
+</script>
+</body>
+</html>

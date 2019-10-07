@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Linuxluigi.com - blog</title><link href="https://linuxluigi.com/" rel="alternate"></link><link href="https://linuxluigi.com/feeds/blog.atom.xml" rel="self"></link><id>https://linuxluigi.com/</id><updated>2019-10-07T18:12:00+02:00</updated><entry><title>Eigener OpenStreetMap Tile-Server mit Zeitsensitivität</title><link href="https://linuxluigi.com/posts/2019/Sep/30/osm-zeit-sensitiv/" rel="alternate"></link><published>2019-09-30T18:00:00+02:00</published><updated>2019-10-07T18:12:00+02:00</updated><author><name>Steffen Exler</name></author><id>tag:linuxluigi.com,2019-09-30:/posts/2019/Sep/30/osm-zeit-sensitiv/</id><summary type="html">&lt;p class="first last"&gt;5 Monate Arbeit an ein eigenen OpenStreetMap Tile Server der Zeitangaben akzeptiert&lt;/p&gt;
+</summary><content type="html">&lt;div class="section" id="einleitung"&gt;
+&lt;h2&gt;Einleitung&lt;/h2&gt;
+&lt;p&gt;Es fing damit an, dass ich ein Projekt in den Fach Ortsbasierten Informationssysteme ausarbeiten sollte. Das Projekt sollte zu
+80% in meiner Note einfließen. Ursprünglich wollte ich nur die vorhandenen Systeme Dokumentieren und Grafisch aufbereiten.
+Doch schon bei der Dokumentation des erstens Projekt, mit Hilfe von Mapnik ein eigenen OpenStreetMap Tile Server zu
+erstellen welcher Zeitangaben akzeptiert, hatte ich aufgehört zu Dokumentieren und fing an dem Team zu helfen, welches das System
+zum laufen zu bringen soll. Immer mehr habe ich mich in dem Team eingearbeitet und fing an umfangreich Code beizusteuern.
+So habe ich erst ein Docker System aufgebaut wo einen normalen Mapnik Tile-Server drauf lief und lernte erst einmal die
+einzelnen Komponenten kennen. Am Anfang dachte ich erst man müsste den OpenStreetMap Tile Server aufbohren und ihn
+beibringen Zeitangaben zu akzeptieren. Doch mein Prof hat mir schnell erklärt das er vom forken nicht viel hält, da es
+schwer zu warten ist und so ein Uniprojekt müsse einfach bleiben.&lt;/p&gt;
+&lt;p&gt;Na gut dann halt etwas anderes. Der nächste Ansatz war für mich mit Flask &amp;amp; Python ein eigenen Tile Server zu schreiben.
+Das ging ziemlich flott, nachdem ich herausbekommen habe welche Abhängigkeiten alles benötigt werden.
+Der nächste Schritt war anschließend die Abhängigkeit &lt;a class="reference external" href="https://github.com/gravitystorm/openstreetmap-carto"&gt;https://github.com/gravitystorm/openstreetmap-carto&lt;/a&gt; die Zeitangaben
+bei zu bringen. Auch hier versuchte ich mein Glück und fragte den Prof ob wir nicht wenigstens dieses Projekt forken
+können, es muss hier auch nur eine Datei gewartet werden. Die Datei welche die SQL beinhaltet. Das sollte nicht so schwer
+zu warten sein, meinte ich. Aber auch hier war seine Antwort, dass er sicher lieber ein Tool wünscht welches die &lt;cite&gt;project.mml&lt;/cite&gt; Zeit
+sensitiv macht. Nun gut, mein Team braucht ja auch Aufgaben und wollten sich diesen Punkt widmen. Mir war es recht, denn so
+konnte ich mich ungestört der Webentwicklung konzentrieren. Yeah 😎&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="der-simple-tile-server"&gt;
+&lt;h2&gt;Der Simple Tile-Server&lt;/h2&gt;
+&lt;p&gt;Da mein Prof es möglich simple haben wollte, habe ich den Webserver zuerst als eine Flask App geschrieben. Innerhalb von
+100 Zeilen Code &amp;amp; Kommentaren war der Tile Server mit ein einfachen Caching geschrieben. Etwas zäh und in meinen Augen
+nicht Produktionsreif aber der Proof-of-Concept war damit geschaffen. Als nächstes wollte ich noch eine Tile-Producer-Queue
+hinzufügen. So das eine Tile URL nur ein Tile vom System erstellt wird und nicht wenn mehrere User die URL
+gleichzeitig aufrufen, dass das Tile mehrfach parallel erstellt wird. Aber mein Prof rudert mich auch hier wieder zurück
+:'( ich sollte doch lieber die Dokumentation schreiben und es wartungsfreundlich zu machen.
+Nun gut, den Punkt verstehe ja. Also Dokumentation schreiben und gut ist.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="der-komplexe-tile-server"&gt;
+&lt;h2&gt;Der Komplexe Tile-Server&lt;/h2&gt;
+&lt;p&gt;Der simple Server war ja fertig und mein Team war mit den SQL Part beschäftigt. Ich hatte keine Vorlesungen und Zeit. So konnte
+mich meinen Entwickler Herz frei hingeben, etwas nebenbei Arbeiten und mich weiter in der Materie einlesen.
+Ich arbeite liebend gerne mit dem Web-Framework Django. Das ist das große Python Web Framework, wie geschaffen für eine
+solch komplexe Aufgabe dachte ich mir. Die erste Frage die ich mir stellte, kann Django die OpenStreetMap Datenbank mappen?
+In diversen Foren &amp;amp; Stackoverflow gab es diesbezüglich viele Anfragen aber keine direkte Lösung. Also recherchierte ich
+weiter ob Django ORM Tool es zulässt eine bestehende Datenbank als ein Django Model zu konvertieren und siehe da, Django
+kann es Wuhuu 😁
+Das ich jetzt mehrere Tage brauchte um ein Docker Container zu erstellen wo Django mit PostGis Unterstützung läuft, sei
+jetzt mal dahin gestellt. Für mich fühlte es sich nur wie wenige Stunden an 😝
+Jetzt nur noch kurz probieren ob ich ein Tile auf die Datenbank projektieren kann ... ... Ja es geht und die Abfrage
+von wann bis wann die das Tile valide ist, work like a Charme.
+Ich fühlte mich zwar etwas schlecht dabei, das ich schon so viel probierte. Da ich mein Prof mir anbot meine
+Bachelorarbeit in dem Thema zu schreiben (Tile Caching mit Zeitraum Angabe) aber es fühlte sich zu simple an.
+Ich wollte mehr und steigerte mich weiter rein.&lt;/p&gt;
+&lt;p&gt;Nun gut das Tile Caching war innerhalb eines Vormittags so weit angepasst, das der Server nun ein Zeitraum festlegen
+konnte von wann bis wann das Tile valide ist.&lt;/p&gt;
+&lt;p&gt;Der nächste Schritt, die Tile Producer Queue. Die war schon etwas kniffliger. Hierzu nutze ich Celery, ein Tool
+um Aufgaben in extra Container und einer Producer Queue zu lösen. Da ich noch nie Celery bevor nutze musste ich mich
+erst einmal einige Stunden einlesen was das überhaupt ist und zu was man es verwenden kann. Um so mehr ich mich einlas
+um so mehr war ich der Meinung das es das Tool ist was ich brauche. Also Ärmel hochgekrempelt, Dinkelkaffe geschnappt
+und ran ans Werk.
+Damit gleich das Caching richtig integriert ist, habe ich erst einmal ein Django Model erstellt, welches Informationen
+über bereits erstellte Tiles &amp;amp; Tiles die gerade bearbeitet werden erstellt. So konnte ich schon einmal sicherstellen
+das ein Tile nur einmal bearbeitet wird und ein zweiter User das Tile von den Request zuvor erhält. Die Ausgabe der Tiles
+erfolgt bei beiden Usern gleichzeitig, sobald es halt fertig ist :) Um die Performance hoch zu halten werden die fertigen
+Tiles nicht in der Datenbank gesichert sondern in einem Redis Cache hochgeladen, welcher mir auch die Aufgabe abnimmt, alte
+und nicht mehr benötigte Tiles automatisch aus dem System zu löschen.&lt;/p&gt;
+&lt;p&gt;Aber auch hier war die Arbeit in ein bis zwei Tagen gut erledigt und ich war zufrieden und konnte etwas durchatmen und
+von Projekt in ruhe Abstand nehmen.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="der-sql-part"&gt;
+&lt;h2&gt;Der SQL Part&lt;/h2&gt;
+&lt;p&gt;Ja eigentlich war es der Plan das meine Kollegen sich mit dem Thema beschäftigen aber sie hatten Probleme und wir trafen
+uns gemeinsam. Okay, an sich kein Problem, ich wollte mich für meine Bachelorarbeit eh mehr mit der OSM Datenbank
+beschäftigen.
+Nach einigen Stunden gemeinsam am Tool arbeiten welches die &lt;cite&gt;project.mml&lt;/cite&gt; Zeit sensitiv machen soll, gaben wir auf ...
+Wir sahen kein Ende der Arbeit. Sobald wir einige Statements fertigstellen haben, haben wir diese an einer anderen Stelle
+zerstört. Also hat einer aus dem SQL Team die Aufgabe übernommen die SQL Statements per Hand zu ändern und das
+Projekt zu forken &lt;a class="reference external" href="https://github.com/linuxluigi/openstreetmap-carto/"&gt;https://github.com/linuxluigi/openstreetmap-carto/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Damit mein Kollege das Projekt gut bearbeiten kann, habe ich extra Debug URL's eingefügt, so das die &lt;cite&gt;project.mml&lt;/cite&gt;
+mithilfe von &lt;cite&gt;carto&lt;/cite&gt; zu einer &lt;cite&gt;style.xml&lt;/cite&gt; zu konvertieren, welche der Tile-Server akzeptiert. An sich sehr praktisch
+um an dem System langfristig zu arbeiten. Bei der Gelegenheit habe ich auch gleich eine URL eingefügt, wo ein normales
+Tile erstellt wird, welches nicht Zeit sensitiv sind.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="die-dokumention-travis"&gt;
+&lt;h2&gt;Die Dokumention &amp;amp; Travis&lt;/h2&gt;
+&lt;p&gt;Die Dokumentation ging recht flott von der Hand. In Gedanken überlegte ich zwar was ich vergessen habe aufzuschreiben
+aber in großen und ganzen sollte das meiste dabei sein, der Rest kommt halt nach.
+Was mich aber viel mehr fertig machte ... testen mit &lt;cite&gt;TRAVIS&lt;/cite&gt;, an sich läuft es gut aber sobald ich versuchte in Travis
+&lt;cite&gt;Postgis&lt;/cite&gt; zu integrieren kamen bei mir immer Fehler. Das Problem dabei war auch, jeder Test dauerte zwischen 15 bis 45
+Minuten... Aber auch nach Tagen keine Lösung. Egal, lass es erst einmal sacken vielleicht fällt mir ja später was ein.
+Heute nun habe ich auf Reddit mein Projekt vorgestellt -&amp;gt; &lt;a class="reference external" href="https://www.reddit.com/r/django/comments/db8jvb/feedback_for_a_time_sensitive_openstreetmap/"&gt;https://www.reddit.com/r/django/comments/db8jvb/feedback_for_a_time_sensitive_openstreetmap/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Nach 8 Stunden kam das erste Feedback zu mein großes Problem &lt;cite&gt;TRAVIS&lt;/cite&gt;. Der User meinte, ich könnte es doch mit Docker
+lösen -.- warum ich mir die Arbeit mache 2 Systeme aufzubauen. Nun weiß ich was ich morgen Probieren werden.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="fazit"&gt;
+&lt;h2&gt;Fazit&lt;/h2&gt;
+&lt;p&gt;Ich bin ziemlich happy über das Ergebnis, es ist zwar noch etwas Arbeit um es Produktion fähig zu machen aber es
+ist Absehbar. Die nächste Aufgabe wird hoffentlich sein, die Zukunft abzubilden. Ein Kartenmaterial zu erzeugen welches
+den steigenden Meeresspiegel simuliert, mein Prof hat grundsätzlich gemeint das es funktionieren sollte. Ich werde
+diesbezüglich noch etwas recherchieren und mit etwas Glück wird das nun meine Bachelorarbeit 😉&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="update-zu-travis"&gt;
+&lt;h2&gt;Update zu Travis&lt;/h2&gt;
+&lt;p&gt;Kurz um, es läuft super. Die Test laufen nun auch viel schneller durch und ich kann gleichzeitig die Docker Container testen.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="Docker"></category><category term="Erfahrung"></category><category term="OHDM"></category><category term="OSM"></category><category term="Django"></category><category term="Flask"></category></entry><entry><title>Banana Pi Resilio Sync File Server</title><link href="https://linuxluigi.com/posts/2019/M%C3%A4r/04/docker-erste-erfahrung/" rel="alternate"></link><published>2019-03-04T18:50:00+01:00</published><updated>2019-03-04T18:50:00+01:00</updated><author><name>Steffen Exler</name></author><id>tag:linuxluigi.com,2019-03-04:/posts/2019/Mär/04/docker-erste-erfahrung/</id><summary type="html">&lt;p class="first last"&gt;Mein erstes Docker Erlebnis in der Uni&lt;/p&gt;
+</summary><content type="html">&lt;div class="section" id="einleitung"&gt;
+&lt;h2&gt;Einleitung&lt;/h2&gt;
+&lt;p&gt;Im letzten Semster mussten wir zu 8 die Webiste des HTW-Computermuseums neu gestalten. Leider stellten wir während des
+Projektes fest, dass die Server Infrastruktur neu erstellt werden muss. So diskutierten wir im Team, was für Möglichkeiten
+es gibt, die folgende Kriterien erfüllen:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;strong&gt;Projekt Versionierung:&lt;/strong&gt; Damit die getätigten Änderungen am System immer protokolliert werden müssen und auch
+Designänderungen leicht durchzuführen sind.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multiple Instanzen:&lt;/strong&gt; Entwicklungsumgebung, Staging Server &amp;amp; Produktion Server sollen möglichst identisch sein.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Einheitliche Entwicklungsumgebung:&lt;/strong&gt; Entwicklungsumgebung soll leicht zu installieren sein und auf Linux, Mac &amp;amp;
+Windows ohne großen Zeitaufwand einrichtbar sein.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Keine extra kosten:&lt;/strong&gt; die verwendete Software sollte keine Extrakosten durch Lizensen verursachen.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sandboxing:&lt;/strong&gt; Möglich Sandboxing von Microservices.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Docker hat alle diese Voraussetzung erfüllt und ich persönlich freute mich endlich einmal Zeit zu nehmen, um mich in Docker
+einzuarbeiten :)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="die-ersten-2-wochen"&gt;
+&lt;h2&gt;Die ersten 2 Wochen&lt;/h2&gt;
+&lt;p&gt;Hierbei sei gesagt, ich habe im Durchschnitt 1 bis 2 Tage die Woche am Projekt gearbeitet, aber vor dem Schlafengehen
+oder in der Bahn mir mehrere Dokumenationen von Docker angesehen.&lt;/p&gt;
+&lt;p&gt;Die Anfangszeit war etwas schwer, ich verstand schnell, wie ich mittels einer Dockerfile ein Linux-Container aufsetzen kann.
+Wie ich aus verschiedene Linux Distros wähle und mir mein Wunschsystem zusammenstelle. Doch einfache Websites mit SSL
+und Domain Weiterleitung erschienen mir äußerst kompliziert, sowie wie eine Dockerfile mit Git versioniert werden ohne
+Docker Hub.&lt;/p&gt;
+&lt;p&gt;In laufe der Zeit kam ich dann langsam zu Docker-Compose, wo ich mehrere Docker-Container in einer Datei verwalten konnte.
+Auch die Verwendung von Enviroment Variablen verstand ich so langsam. So dass Domains und Logindaten nicht länger
+hardcoded werden müssen. &lt;cite&gt;Yeah :)&lt;/cite&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="traefik-http-reverse-proxy-load-balancer"&gt;
+&lt;h2&gt;Traefik - HTTP reverse proxy &amp;amp; load balancer&lt;/h2&gt;
+&lt;p&gt;Nach einer Zeit bin ich dann auf &lt;a class="reference external" href="https://traefik.io/"&gt;Traefik&lt;/a&gt; gestoßen. Ein HTTP &lt;cite&gt;reverse proxy und load balancer&lt;/cite&gt;, praktischerweise
+gibt es auch offiziellen Docker Support von Traefik. So konnte ich auf einmal sehr leicht automatische SSL Zertifikate
+von Let's Encrypt erstellen. Nun bekam jeder Website Container sein eigenes SSL Zertifikat. Auch enthält Traefik ein
+Domain Routing, nun war es möglich für mehrere Domains innerhalb einer Docker Compose File zu verwalten. Die &lt;cite&gt;www&lt;/cite&gt;
+Subdomain zeigte dabei auf den Wordpress Container, &lt;cite&gt;db-admin&lt;/cite&gt; auf Adminer &amp;amp; &lt;cite&gt;admin&lt;/cite&gt; auf Collective Access.&lt;/p&gt;
+&lt;p&gt;Nachdem ich so langsam mit Traefik zurecht kam und mir die Doku diesbezüglich durchgelesen habe, fing ich an
+Docker-Compose immer mehr zu feiern. So überlegte ich auch, wie praktisch die Software in anderen Projekten ist und wie
+leicht diese zu verwalten ist.&lt;/p&gt;
+&lt;p&gt;Ich war nun von Docker gefesselt!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="collective-access-museums-ausstellungsstucke-verwaltungs-software"&gt;
+&lt;h2&gt;Collective Access - Museums Ausstellungsstücke Verwaltungs Software&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://www.collectiveaccess.org/"&gt;Collective Access&lt;/a&gt; ist die Verwaltungswebsite von dem Computer Museum. Diese sollte natürlich auch in Docker-Compose
+integriert werden. Diese Aufgabe war die schwierigste.&lt;/p&gt;
+&lt;p&gt;Als Erstes schauten wir, ob ein Docker Image für Collective Access existiert, dies war zwar der Fall, doch wurde
+dieses Image nicht mehr aktiv gewartet und fiel dadurch aus.&lt;/p&gt;
+&lt;p&gt;Als Nächstes probierte ich ein simplen NGINX Container mit PHP zu erstellen. Collective Access sollte in diesem Versuch
+im Docker-Compose vollständig heruntergeladen werden. So lud ich Collective Access Git Repo innerhalb des Docker-Compose
+Projektes herunter. Das funktionierte anfangs relativ gut, doch war der Aufbau ziemlich unstabil. Wenn ich die Ordner
+Strukture ändern wollte, waren die Git Links nicht gleichzeitig aktualisiert worden. Auf anderen Geräten wurde
+Collective Access nicht immer heruntergeladen. Das größte Problem war aber, dass die Zugriffsrechte nicht richtig gesetzt
+waren mit diesem Ansatz... Zu viele Probleme, also ein anderer Weg muss her.&lt;/p&gt;
+&lt;p&gt;Der nächste Weg war es den NGINX Docker Container zu bearbeiten und dort Collective Access zu laden. Am Anfang versuchte
+ich mir einen komplett eigenen NGINX Container zu erstellen, was aber doch zu viel Zeit benötigte. Einige Abschnitte
+des Testens benötigiten mehrere Minuten um die Änderungen zu testen.&lt;/p&gt;
+&lt;p&gt;So viel Zeit hatte ich leider nicht und schaute im Internet, was es noch für Lösungen gab. Ich fand &lt;a class="reference external" href="https://gitlab.com/ric_harvey/nginx-php-fpm"&gt;nginx-php-fpm&lt;/a&gt;
+ein Docker Image welches NGINX, PHP &amp;amp; Git enthielt. Über Enviroment Variablen war es auch möglich eigene Git URLs &amp;amp;
+Git Tags zu übergeben. So lädt sich der Container am ersten Start das aktuelle Git Repo herunter und spring danach auf den
+gewünschten Tag. Auch konnte ich schnell eine Config File für Collective Access erstellen, welches auch auf dem Container
+deployed wird.&lt;/p&gt;
+&lt;p&gt;So weit so gut. Nun lief der Container grundlegend. Aber was ich bislang übersah, Collective Access wurde bislang nur
+für Apache Webserver entwickelt und die NGINX Unterstützung sollte erst in den kommenden Versionen folgen. Das Hauptproblem
+war dabei die &lt;cite&gt;.htaccess&lt;/cite&gt; Datein. Diese Datein werden nur von Apache gelesen und nicht von NGINX. So musste ich anfangen
+die &lt;cite&gt;.htaccess&lt;/cite&gt; Datein in NGINX zu übersetzen. Dies benötigte zwar etwas Arbeit, war aber leichter als ein Apache
+Docker Container zu erstellen.&lt;/p&gt;
+&lt;/div&gt;
+</content><category term="docker"></category><category term="erfahrung"></category></entry></feed>
