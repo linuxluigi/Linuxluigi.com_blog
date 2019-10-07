@@ -1,0 +1,95 @@
+Banana Pi Resilio Sync File Server
+##################################
+
+:date: 2019-03-04 18:50
+:modified: 2019-03-04 18:50
+:tags: docker, erfahrung
+:category: blog
+:slug: docker-erste-erfahrung
+:summary: Mein erstes Docker Erlebnis in der Uni
+:subtitle: Docker, mein erstes Erlbnis
+
+Einleitung
+----------
+
+Im letzten Semster mussten wir zu 8 die Webiste des HTW-Computermuseums neu gestalten. Leider stellten wir während des
+Projektes fest, dass die Server Infrastruktur neu erstellt werden muss. So diskutierten wir im Team, was für Möglichkeiten
+es gibt, die folgende Kriterien erfüllen:
+
+- **Projekt Versionierung:** Damit die getätigten Änderungen am System immer protokolliert werden müssen und auch
+  Designänderungen leicht durchzuführen sind.
+- **Multiple Instanzen:** Entwicklungsumgebung, Staging Server & Produktion Server sollen möglichst identisch sein.
+- **Einheitliche Entwicklungsumgebung:** Entwicklungsumgebung soll leicht zu installieren sein und auf Linux, Mac &
+  Windows ohne großen Zeitaufwand einrichtbar sein.
+- **Keine extra kosten:** die verwendete Software sollte keine Extrakosten durch Lizensen verursachen.
+- **Sandboxing:** Möglich Sandboxing von Microservices.
+
+Docker hat alle diese Voraussetzung erfüllt und ich persönlich freute mich endlich einmal Zeit zu nehmen, um mich in Docker
+einzuarbeiten :)
+
+Die ersten 2 Wochen
+-------------------
+
+Hierbei sei gesagt, ich habe im Durchschnitt 1 bis 2 Tage die Woche am Projekt gearbeitet, aber vor dem Schlafengehen
+oder in der Bahn mir mehrere Dokumenationen von Docker angesehen.
+
+Die Anfangszeit war etwas schwer, ich verstand schnell, wie ich mittels einer Dockerfile ein Linux-Container aufsetzen kann.
+Wie ich aus verschiedene Linux Distros wähle und mir mein Wunschsystem zusammenstelle. Doch einfache Websites mit SSL
+und Domain Weiterleitung erschienen mir äußerst kompliziert, sowie wie eine Dockerfile mit Git versioniert werden ohne
+Docker Hub.
+
+In laufe der Zeit kam ich dann langsam zu Docker-Compose, wo ich mehrere Docker-Container in einer Datei verwalten konnte.
+Auch die Verwendung von Enviroment Variablen verstand ich so langsam. So dass Domains und Logindaten nicht länger
+hardcoded werden müssen. `Yeah :)`
+
+Traefik - HTTP reverse proxy & load balancer
+--------------------------------------------
+
+Nach einer Zeit bin ich dann auf `Traefik`_ gestoßen. Ein HTTP `reverse proxy und load balancer`, praktischerweise
+gibt es auch offiziellen Docker Support von Traefik. So konnte ich auf einmal sehr leicht automatische SSL Zertifikate
+von Let's Encrypt erstellen. Nun bekam jeder Website Container sein eigenes SSL Zertifikat. Auch enthält Traefik ein
+Domain Routing, nun war es möglich für mehrere Domains innerhalb einer Docker Compose File zu verwalten. Die `www`
+Subdomain zeigte dabei auf den Wordpress Container, `db-admin` auf Adminer & `admin` auf Collective Access.
+
+Nachdem ich so langsam mit Traefik zurecht kam und mir die Doku diesbezüglich durchgelesen habe, fing ich an
+Docker-Compose immer mehr zu feiern. So überlegte ich auch, wie praktisch die Software in anderen Projekten ist und wie
+leicht diese zu verwalten ist.
+
+Ich war nun von Docker gefesselt!
+
+.. _Traefik: https://traefik.io/
+
+Collective Access - Museums Ausstellungsstücke Verwaltungs Software
+-------------------------------------------------------------------
+
+`Collective Access`_ ist die Verwaltungswebsite von dem Computer Museum. Diese sollte natürlich auch in Docker-Compose
+integriert werden. Diese Aufgabe war die schwierigste.
+
+Als Erstes schauten wir, ob ein Docker Image für Collective Access existiert, dies war zwar der Fall, doch wurde
+dieses Image nicht mehr aktiv gewartet und fiel dadurch aus.
+
+Als Nächstes probierte ich ein simplen NGINX Container mit PHP zu erstellen. Collective Access sollte in diesem Versuch
+im Docker-Compose vollständig heruntergeladen werden. So lud ich Collective Access Git Repo innerhalb des Docker-Compose
+Projektes herunter. Das funktionierte anfangs relativ gut, doch war der Aufbau ziemlich unstabil. Wenn ich die Ordner
+Strukture ändern wollte, waren die Git Links nicht gleichzeitig aktualisiert worden. Auf anderen Geräten wurde
+Collective Access nicht immer heruntergeladen. Das größte Problem war aber, dass die Zugriffsrechte nicht richtig gesetzt
+waren mit diesem Ansatz... Zu viele Probleme, also ein anderer Weg muss her.
+
+Der nächste Weg war es den NGINX Docker Container zu bearbeiten und dort Collective Access zu laden. Am Anfang versuchte
+ich mir einen komplett eigenen NGINX Container zu erstellen, was aber doch zu viel Zeit benötigte. Einige Abschnitte
+des Testens benötigiten mehrere Minuten um die Änderungen zu testen.
+
+So viel Zeit hatte ich leider nicht und schaute im Internet, was es noch für Lösungen gab. Ich fand `nginx-php-fpm`_
+ein Docker Image welches NGINX, PHP & Git enthielt. Über Enviroment Variablen war es auch möglich eigene Git URLs &
+Git Tags zu übergeben. So lädt sich der Container am ersten Start das aktuelle Git Repo herunter und spring danach auf den
+gewünschten Tag. Auch konnte ich schnell eine Config File für Collective Access erstellen, welches auch auf dem Container
+deployed wird.
+
+So weit so gut. Nun lief der Container grundlegend. Aber was ich bislang übersah, Collective Access wurde bislang nur
+für Apache Webserver entwickelt und die NGINX Unterstützung sollte erst in den kommenden Versionen folgen. Das Hauptproblem
+war dabei die `.htaccess` Datein. Diese Datein werden nur von Apache gelesen und nicht von NGINX. So musste ich anfangen
+die `.htaccess` Datein in NGINX zu übersetzen. Dies benötigte zwar etwas Arbeit, war aber leichter als ein Apache
+Docker Container zu erstellen.
+
+.. _Collective Access: https://www.collectiveaccess.org/
+.. _nginx-php-fpm: https://gitlab.com/ric_harvey/nginx-php-fpm
