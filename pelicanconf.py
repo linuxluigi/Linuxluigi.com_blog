@@ -28,7 +28,7 @@ CC_LICENSE = {
     'slug': 'by-sa'
 }
 
-COPYRIGHT_YEAR = 2017
+COPYRIGHT_YEAR = 2019
 
 EXTRA_PATH_METADATA = {
     'extra/custom.css': {'path': 'static/custom.css'},
@@ -88,4 +88,6 @@ ARTICLE_SAVE_AS = 'posts/{date:%Y}/{date:%b}/{date:%d}/{slug}/index.html'
 
 # social links
 SOCIAL = (('github', 'https://github.com/linuxluigi'),
-          ('rss', '//linuxluigi.com/feeds/all.atom.xml'))
+          ('rss', '//linuxluigi.com/feeds/all.atom.xml'),
+          ('twitter', 'https://twitter.com/linuxluigi'),
+          ('reddit', 'https://www.reddit.com/user/linuxluigi'),)
