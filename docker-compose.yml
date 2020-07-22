@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  pelican:
+    build:
+      context: .
+      dockerfile: ./compose/Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: /start

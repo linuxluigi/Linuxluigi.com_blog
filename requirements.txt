@@ -1,13 +1,2 @@
 # Core
-pelican==3.7.1
-markdown>=2.6.9
-
-# search plugin
-beautifulsoup4>=4.6.0
-
-# asset plugin
-webassets>=0.12.1
-cssmin>=0.2.0
-
-# deploy to gh pages
-ghp-import
+pelican==4.2.0 
