@@ -1,0 +1,124 @@
+3 Monate arbeiten mit VS Code auf Windows
+#########################################
+
+:date: 2019-11-25 18:00
+:modified: 2019-11-25 18:00
+:tags: vs-code, webstorm, ide, typescript, angular, python, django, windows, MacOs, Praktikum
+:category: blog
+:slug: umstieg-von-webstorm-auf-vs-code
+:summary: 3 Wochen arbeiten mit VS Code auf Windows anstelle Webstorm auf MacOs
+:subtitle: Umstieg von Webstorm auf VS-Code
+
+Einleitung
+----------
+
+Zum Abschluss meines Studiums muss ich ein 3 monatiges Praktikum machen. Um aus meiner Konfortzone herauszukommen habe
+ich mein Praktikum bei Saxonia gemacht. Die Firma wirkte auf mich sehr freundlich & herzlich ABER es ist eine Windows
+Firma. Ein Windows Laptop ist das standart Equipment eines jeden Mitarbeiters. Das sorgte für mich schon für etwas
+Unbehagen aber nun gut. Das Praktikum ist ja erst einmal für 3 Monate limitiert und sooo schlimm wird das ja nun auch
+nicht sein.
+
+Der erste Arbeitstag
+--------------------
+
+Nachdem ich am Freitag eine Einweisung zur Firma erhalten hatte, fing der Monat als erster richtiger Tag an.
+
+Schon in der Busfahrt von der Arbeit nach Hause, fing ich mir an mein System einzurichten. Ich wollte mir mein Laptop
+wie ein Mac einrichten, zumindest die Gesten, Desktop Workspaces und Apps, soweit dies ging.
+
+Am Montag hatte ich dann erfahren mit was für ein Techstack ich abreiten soll. Mein Tehmenbereich sollte Angular Entwicklung
+sein, also war der Techstack NPM. Das gefiehl mir doch gut, die Firma gab mir das Geld um bei Udemy 2 Lernkurse zu kaufen
+und durchzuarbeiten. Dementsprechend installierte ich mir NodeJS und VS-Code. Mir wurde zwar nicht vorgeschrieben
+VS-Code zu verwenden aber da viele mit der IDE arbeiten und sie auch in kommerzieller Nutzung gratis ist, installierte
+ich sie mir. Mein Vorgesetzter hatte mir auch 2 Erweiterungen empfolen zum Angular schreiben.
+
+Die ersten Versuche waren etwas holbrig. Als Shell alternative versuchte ich mich in der Powershell und wunderte mich
+warum es nicht so richtig funktioniert npm zu verwenden. Bis mir ein Kollege sagte, das ich einfach CMD nehmen sollte :(
+Ja damit waren meine Probleme gelöst aber auch meine Träume mit einer Shell vollständig unter Windows arbeiten zu können.
+
+Nachdem ich mit der Angular CLI mein erstes Demo Projekt erstellte, spielte ich etwas mit der neuen IDE herum. Es gefiel
+mir, ich spielte schon länger mit dem Gedanken von IntelliJ / Webstorm / Pycharm auf VS-Code umzusteigen, nicht zuletzt
+der Kosten wegen. Nun wurde ich stark motiviert auf VS-Code umzusteigen.
+
+Die gefühlten Vorteile, die ich innerhalb des ersten Tages merkte, gegenüber Webstorm:
+
+- Ressourcensparender, keine lange Wartezeiten nachdem ein Projekt geöffnet wurde.
+- Nur eine IDE für alle Sprachen.
+- Autocomplete geht wunderbar.
+- Viele Extensions die gut beschrieben sind, viel zu viele um ein perfekten Arbeitsplatz innerhalb eines Tages einzurichten.
+
+Erfahrung nach über 2 Monaten VS-Code
+-------------------------------------
+
+Migration von IntelliJ zu VS-Code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ich bin nun auch Privat fast vollständig zu VS-Code gewechselt, nur noch alte Projekte, die ich vor langer Zeit mir IntelliJ
+erstellt, habe ich dabei belassen. Neue Projekte in unterschiedlichen Sprachen habe ich zwischenzeitlich mit VS-Code
+umgesetzt. Die vielzahl an Apps für VS-Code half mir sehr stark zu wecheln. Es ist für mich eine derart starke
+Bereicherung mit Apps zu arbeiten. Für viele kleine Routine Aufgaben gibt es schon fertigte Apps. So zum Beispiel
+`Copy Django model fields <https://marketplace.visualstudio.com/items?itemName=baterson.copy-django-model-fields>`_,
+diese App ermöglich es im Code eines Django Models die Felder einfach herauszukopieren und in anderer Stelle wieder
+einzuufügen. Ohne umständliches Copy & Paste für jedes einzelne Feld.
+
+Meine Lieblingsapps für VS-Code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Settings Sync
+****************
+
+`Settings Sync <https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync>`_ ist für mich Persönlich
+die nützlichste, da die App alle Einstellungen und installierte Apps mit einen Gist von meinen Github Account
+synchronisiert und Computer übergreifend arbeiten kann ohne das ich Hand anlegen muss. Nie wieder Settings durch ein
+neues Update der IDE neu setzten!
+
+2. IntelliJ IDEA Keybindings
+****************************
+
+Für den Umstieg von IntelliJ auf VS-Code half mir auch stark
+`IntelliJ IDEA Keybindings <https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings>`_.
+Diese App setzt die liebgewordenen IntelliJ Shortcuts auch in VS-Code, wodurch die umgewöhnung sehr schnell voran ging.
+
+3. Auto Formatter
+*****************
+
+Mit Auto Formatter meine ich gar nicht eine spezielle App, sondern die möglichkeit für verschiedenen Programmiersprachen
+den Code automatisch nach Best-Practice zu formatieren. Ich habe es mit so eingerichtet, dass sobald eine Datei
+gespeichert wird, automatisch auch formatiert wird. So sehen alle Git-Commits automatisch gut formatiert aus.
+
+Hier ein paar die ich verwende:
+
+- Python: `Python (Black) <https://marketplace.visualstudio.com/items?itemName=ms-python.python>`_
+- TypeScript: `tsfmt - TypeScript Formatter <https://marketplace.visualstudio.com/items?itemName=eternalphane.tsfmt-vscode>`_
+- SCSS: `SCSS Formatter <https://marketplace.visualstudio.com/items?itemName=sibiraj-s.vscode-scss-formatter>`_
+
+4. Git
+******
+
+Mit der App `Git History <https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory>`_ ist es leicht
+in der IDE die History einzelner Daten anzusehen oder auch den Branch flow eines Projektes leicht einzusehen.
+
+Für Git fand ich auch die App
+`GitHub Pull Requests <https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github>`_
+sehr praktisch, da sich die IDE leicht mit den GitHub Account verknüft und somit Github aktionen in der IDE ausführen
+lassen ohne sich mit dem Key Management auseinander zu setzten, besonders unter Windows fand ich dies sehr praktisch :)
+
+5. Firefox Quantum Themes
+*************************
+
+Es gibt eine vielzahl von Vorkonfigurierten Themes, ich persönlich entschloss mich für
+`Firefox Quantum Themes <https://marketplace.visualstudio.com/items?itemName=beastdestroyer.firefox-quantum-themes>`_.
+Da ich auch Firefox zur Webentwicklung verwende und somit ein einheitliches Farbschema zum entwickeln verwenden kann.
+Außerdem sieht das Theme auch einfach gut aus ;)
+
+One IDE to rule them all!
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Es ist ein Traum, für VS-Code gibt es fast im Monatstakt ein neues Update, welche das Arbeiten verbessert ohne das ich
+für jedes Update irgentwelche Settings anpassen musste. Die Updates werden einfach installiert und funktionieren :)
+
+In moment arbeite ich häufig mit verschiedenen Programmier- & Scriptsprachen wie TypeScript, JavaScript, CSS, SCSS,
+Python, Docker, Shell und Angular. Früher hatte ich je nach Projekt unterschiedliche IDE's genommen, welche auch sehr
+viel Speicherplatz auf meinem Rechner eingenommen hatten. Und für jede dieser IDE's musste ich auch die Settings einzeln
+anpassen. Da aber in einem Projekt gerne auch mal mehrere Programmiersprachen vorkamen, machte ich viel redunante arbeit.
+Dies ist mit VS-Code vorbei. Eine IDE die für alle Sprachen die ich verwende funktioniert und dies OpenSource & Gratis!
