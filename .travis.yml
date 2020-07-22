@@ -1,0 +1,28 @@
+dist: bionic
+
+language: python
+
+os:
+  - linux
+
+services:
+  - docker
+
+cache:
+  pip: true
+  directories:
+    - $HOME/.cache/pip
+
+addons:
+  apt:
+    packages:
+      - python3-pip
+      - python3-setuptools
+
+install:
+  # install docker-compose
+  - pip3 install docker-compose wheel
+
+script:
+  # build site
+  - sudo docker-compose run --rm pelican pelican content
